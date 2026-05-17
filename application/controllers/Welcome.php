@@ -6,11 +6,6 @@ class Welcome extends CI_Controller {
 	  public function __construct()
     {
         parent::__construct();
-
-        if (!$this->session->userdata('logged_in')) {
-
-        redirect('/');
-    }
     }
 	 
 	public function index()
@@ -94,35 +89,6 @@ public function dashboard()
         redirect('login');
     }
 
-    // // Get role from session
-    // $role = $this->session->userdata('role');
-
-    // // Role based redirect
-    // if ($role == 'super_admin') {
-
-    //     redirect('student');
-
-    // } elseif ($role == 'admin') {
-
-    //     redirect('admin/dashboard');
-
-    // } elseif ($role == 'student') {
-
-    //     redirect('student/dashboard');
-
-    // } else {
-
-    //     // Unknown role
-    //     $this->session->sess_destroy();
-
-    //     $this->session->set_flashdata([
-    //         'msg_type'  => 'error',
-    //         'msg_title' => 'Access Denied!',
-    //         'msg_text'  => 'Invalid user role'
-    //     ]);
-
-    //     redirect('login');
-    // }
 
     $this->load->view('dashboard');
 }
