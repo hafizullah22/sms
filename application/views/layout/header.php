@@ -194,7 +194,7 @@ body{
 
     <div class="sidebar-menu">
 
-        <a href="#" class="active">
+        <a href="<?php echo site_url('welcome/dashboard');?>" class="active">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
 
@@ -212,6 +212,8 @@ body{
         <a href="<?php echo site_url('classes');?>"><i class="bi bi-building"></i> Classes</a>
         <a href="<?php echo site_url('subject');?>"><i class="bi bi-journal"></i> Subjects</a>
         <a href="<?php echo site_url('payment/payment_search');?>"><i class="bi bi-cash"></i> Fees Collect</a>
+        <a href="<?php echo site_url('/result/create');?>"><i class="bi bi-cash"></i> Result</a>
+        <a href="<?php echo site_url('/result/testimonial/3');?>" target="_blank"><i class="bi bi-cash"></i> Testimonial</a>
 
         <?php } ?>
 

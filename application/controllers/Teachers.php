@@ -201,4 +201,6 @@ public function update($id)
     redirect('teachers');
 }
 
+
+
 } //End of Controller 

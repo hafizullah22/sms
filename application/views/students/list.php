@@ -30,7 +30,8 @@
             </div>
             <div class="d-flex gap-2">
                 <button class="btn btn-outline-secondary btn-sm"><i class="fas fa-download me-1"></i> Export</button>
-                <button class="btn btn-primary btn-sm"><i class="fas fa-plus me-1"></i> Add New Student</button>
+               
+                <a href="<?php echo site_url('student/create')?>" class="btn btn-primary btn-sm"><i class="bi bi-plus me-1"></i>Add New Student</a>
             </div>
         </div>
 

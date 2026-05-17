@@ -172,10 +172,14 @@ public function generate_pdf($class_id = NULL)
     }
 
     
-    // OPTIONAL: HEADER (if using library)
-    $this->load->library('mpdf'); // your custom library
-     $mpdf = $this->mpdf->mpdf('A4', 'L');
-    $mpdf->SetHTMLHeader($this->mpdf->header());
+   
+    $this->load->library('pdf');
+
+    // Initialize mPDF
+    $mpdf = $this->pdf->load('A4', 'P');
+
+    // Set Header
+    $mpdf->SetHTMLHeader($this->pdf->header());
 
     // TITLE
     $mpdf->SetTitle("Mark Sheet - " . $data['class']->class_name);
@@ -194,31 +198,57 @@ public function generate_pdf($class_id = NULL)
     $filename = 'Marksheet_' . str_replace(' ', '_', $data['class']->class_name) . '.pdf';
     $mpdf->Output($filename, 'I');
 }
+
+
 public function testimonial($id)
 {
-    // Fetch Data
-    $student = $this->db->get_where('students', ['id' => $id])->row();
-    $school = $this->db->get('school_info')->row();
+    // Fetch Student
+    $student = $this->db
+        ->get_where('students', ['id' => $id])
+        ->row();
 
+    // Fetch School Info
+    $school = $this->db
+        ->get('school_info')
+        ->row();
+
+    // Student not found
     if (!$student) {
         show_404();
     }
 
-    $this->load->library('mpdf');
-    // Initialize mPDF (Unicode enabled)
-    $mpdf = $this->mpdf->mpdf('A4', 'P');
+    // Load PDF Library
+    $this->load->library('pdf');
 
-    $mpdf->SetHTMLHeader($this->mpdf->header());
-    
-    $html = $this->load->view('result/testimonial', ['student' => $student, 'school' => $school], true);
+    // Initialize mPDF
+    $mpdf = $this->pdf->load('A4', 'P');
 
+    // Set Header
+    $mpdf->SetHTMLHeader($this->pdf->header());
+
+    // Load HTML View
+    $html = $this->load->view(
+        'result/testimonial',
+        [
+            'student' => $student,
+            'school'  => $school
+        ],
+        true
+    );
+
+    // Write HTML to PDF
     $mpdf->WriteHTML($html);
 
+    // Clean Output Buffer
     if (ob_get_length()) {
         ob_end_clean();
     }
 
-    $mpdf->Output('Testimonial_'.$student->full_name.'.pdf', 'I');
+    // Generate File Name
+    $filename = 'Testimonial_' . $student->full_name . '.pdf';
+
+    // Output PDF
+    $mpdf->Output($filename, 'I');
 }
 
 }
