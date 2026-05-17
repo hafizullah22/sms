@@ -176,7 +176,7 @@ public function generate_pdf($class_id = NULL)
     $this->load->library('pdf');
 
     // Initialize mPDF
-    $mpdf = $this->pdf->load('A4', 'P');
+    $mpdf = $this->pdf->load('A4', 'L');
 
     // Set Header
     $mpdf->SetHTMLHeader($this->pdf->header());
