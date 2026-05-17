@@ -125,9 +125,6 @@ class Payment extends CI_Controller {
 public function payment_search()
 {
 
-
-    
-
     $this->load->view('payment/search');
 }
 
@@ -236,9 +233,10 @@ public function receipt($student_id)
     ];
 
     // PDF
-    $this->load->library('mpdf');
-    $mpdf = $this->mpdf->mpdf('A4', 'P');
-    $mpdf->SetHTMLHeader($this->mpdf->header());
+       $this->load->library('pdf');
+    $mpdf = $this->pdf->load('A4', 'P');
+    $mpdf->SetHTMLHeader($this->pdf->header());
+
     $mpdf->SetTitle('Payment Statement - ' . $student->full_name);
 
     $html = $this->load->view('payment/receipt', $data, true);
