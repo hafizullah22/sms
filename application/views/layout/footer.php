@@ -62,23 +62,44 @@
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<?php if($this->session->flashdata('msg_type')): ?>
+<?php if ($this->session->flashdata('msg_type')): ?>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
 
-Swal.fire({
-    icon: '<?= $this->session->flashdata("msg_type"); ?>',
-    title: '<?= $this->session->flashdata("msg_title"); ?>',
-    text: '<?= $this->session->flashdata("msg_text"); ?>',
-    confirmButtonColor: '#0d6efd',
-    timer: 3000,
-    showConfirmButton: true
+    Swal.fire({
+        icon: '<?= $this->session->flashdata("msg_type"); ?>',
+        
+        title: '<?= $this->session->flashdata("msg_title"); ?>',
+
+        text: '<?= $this->session->flashdata("msg_text"); ?>',
+
+        toast: true,
+        position: 'top-end',
+
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+
+        background: '#ffffff',
+        color: '#2c3e50',
+
+        customClass: {
+            popup: 'shadow-lg rounded-4 border-0',
+            title: 'fw-bold',
+            htmlContainer: 'text-muted'
+        },
+
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+    });
+
 });
-
 </script>
 
 <?php endif; ?>
-
 </body>
 </html>
 

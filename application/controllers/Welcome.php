@@ -139,7 +139,7 @@ public function logout()
 		'msg_text'  => 'You have been logged out successfully'
 	]);
 
-	redirect('/');
+$this->load->view('login');
 }
 
 }
