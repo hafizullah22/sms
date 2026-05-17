@@ -1,0 +1,87 @@
+<!-- FOOTER -->
+<footer class="main-footer">
+
+    <div class="footer-left">
+        © <?php echo date('Y'); ?> 
+        <strong>School Management System</strong> 
+        | All Rights Reserved
+    </div>
+
+    <div class="footer-right">
+        Developed by 
+        <a href="#" target="_blank" class="text-decoration-none">
+            Your Company
+        </a>
+    </div>
+
+</footer>
+
+<style> 
+
+    .main-footer{
+    background:#fff;
+    border-top:1px solid #dee2e6;
+    padding:12px 18px;
+    font-size:14px;
+    color:#6c757d;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:auto;
+}
+
+.main-footer strong{
+    color:#343a40;
+}
+
+.main-footer a{
+    color:#0d6efd;
+    font-weight:500;
+}
+
+@media(max-width:768px){
+    .main-footer{
+        flex-direction:column;
+        gap:5px;
+        text-align:center;
+    }
+}
+</style>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('show');
+    }
+</script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if($this->session->flashdata('msg_type')): ?>
+
+<script>
+
+Swal.fire({
+    icon: '<?= $this->session->flashdata("msg_type"); ?>',
+    title: '<?= $this->session->flashdata("msg_title"); ?>',
+    text: '<?= $this->session->flashdata("msg_text"); ?>',
+    confirmButtonColor: '#0d6efd',
+    timer: 3000,
+    showConfirmButton: true
+});
+
+</script>
+
+<?php endif; ?>
+
+</body>
+</html>
+
+
+
+
