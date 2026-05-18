@@ -2,268 +2,341 @@
 $role = $this->session->userdata('role');
 $username = $this->session->userdata('username');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>School ERP</title>
 
-<title>School ERP</title>
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        /* ================= GLOBAL RESET ================= */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f6f9;
+            overflow-x: hidden;
+        }
 
-<style>
+        /* ================= LAYOUT WRAPPER ================= */
+        .wrapper {
+            display: flex;
+            position: relative;
+            width: 100%;
+        }
 
-/* ================= BODY ================= */
-body{
-    font-family: 'Inter', sans-serif;
-    background:#f4f6f9;
-}
+        /* ================= MAIN SIDEBAR ================= */
+        .main-sidebar {
+            width: 250px;
+            background: #111;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: transform 0.3s ease;
+            z-index: 1040;
+        }
 
-/* ================= WRAPPER ================= */
-.wrapper{
-    display:flex;
-}
+        .brand-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .brand-link:hover { color: #fff; }
 
-/* ================= SIDEBAR ================= */
-.main-sidebar{
-    width:250px;
-    background:#000;
-    min-height:100vh;
-    position:fixed;
-    left:0;
-    top:0;
-    transition:0.3s;
-}
+        .sidebar-menu {
+            padding: 12px 0;
+        }
 
-.brand-link{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:15px;
-    font-weight:700;
-    color:#fff;
-    border-bottom:1px solid rgba(255,255,255,0.1);
-}
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #c2c7d0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
 
-.sidebar-menu{
-    padding:10px 0;
-}
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #212529;
+            color: #fff;
+            border-left: 4px solid #0d6efd;
+        }
 
-.sidebar-menu a{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:12px 18px;
-    color:#c2c7d0;
-    text-decoration:none;
-    font-size:14px;
-}
+        /* ================= CONTENT WRAPPER ================= */
+        .content-wrapper {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-.sidebar-menu a:hover,
-.sidebar-menu a.active{
-    background:#495057;
-    color:#fff;
-    border-left:3px solid #0d6efd;
-}
+        /* ================= TOP HEADER NAV ================= */
+        .main-header {
+            height: 60px;
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
 
-/* ================= MAIN CONTENT ================= */
-.content-wrapper{
-    margin-left:250px;
-    width:calc(100% - 250px);
-    transition:0.3s;
-}
+        .left-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-/* ================= TOP NAVBAR ================= */
-.main-header{
-    height:55px;
-    background:#fff;
-    border-bottom:1px solid #dee2e6;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 15px;
-    position:sticky;
-    top:0;
-    z-index:100;
-}
+        .sidebar-toggle {
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            padding: 0;
+            cursor: pointer;
+            color: #334155;
+            display: flex;
+            align-items: center;
+        }
 
-/* LEFT */
-.left-nav{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
+        .right-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-.sidebar-toggle{
-    border:none;
-    background:transparent;
-    font-size:20px;
-}
+        .user-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 200px;
+        }
 
-/* RIGHT */
-.right-nav{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
+        .user-box img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid #e2e8f0;
+        }
 
-.user-box{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
+        .user-info {
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-.user-box img{
-    width:35px;
-    height:35px;
-    border-radius:50%;
-}
-
-/* ================= CONTENT ================= */
-.content{
-    padding:20px;
-}
-
-/* ================= CARD ================= */
-.card{
-    border:none;
-    border-radius:10px;
-    box-shadow:0 1px 4px rgba(0,0,0,0.08);
-}
-
-/* ================= SIDEBAR COLLAPSE ================= */
-.sidebar-collapsed .main-sidebar{
-    margin-left:-250px;
-}
-
-.sidebar-collapsed .content-wrapper{
-    margin-left:0;
-    width:100%;
-}
-
-.logout-btn {
-            font-size: 0.813rem;
+        /* ================= LOGOUT BUTTON ================= */
+        .logout-btn {
+            font-size: 0.85rem;
             font-weight: 600;
-            padding: 6px 16px;
+            padding: 7px 14px;
             border-radius: 8px;
-            transition: all 0.2s;
-            border: 1px solid #000;
+            transition: all 0.2s ease;
+            border: 1px solid #ef4444;
             color: #ef4444;
             text-decoration: none;
-        
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .logout-btn:hover {
-            background: #fef2f2;
-            border-color: #fecaca;
+            background: #ef4444;
+            color: #fff;
         }
 
-/* ================= MOBILE ================= */
-@media(max-width:992px){
-    .main-sidebar{
-        margin-left:-250px;
-    }
+        /* ================= DESKTOP SIDEBAR COLLAPSE ================= */
+        @media(min-width: 993px) {
+            .sidebar-collapsed .main-sidebar {
+                transform: translateX(-250px);
+            }
+            .sidebar-collapsed .content-wrapper {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
 
-    .main-sidebar.show{
-        margin-left:0;
-    }
+        /* ================= RESPONSIVE MOBILE VIEWPORTS ================= */
+        @media(max-width: 992px) {
+            .main-sidebar {
+                transform: translateX(-250px);
+            }
 
-    .content-wrapper{
-        margin-left:0;
-        width:100%;
-    }
-}
+            .sidebar-open .main-sidebar {
+                transform: translateX(0);
+            }
 
-</style>
+            .content-wrapper {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .main-header {
+                padding: 0 16px;
+            }
+
+            .right-nav {
+                gap: 12px;
+            }
+
+            /* Responsive components for compact views */
+            @media (max-width: 576px) {
+                .user-info {
+                    display: none;
+                }
+                .logout-btn span {
+                    display: none;
+                }
+                .logout-btn {
+                    padding: 8px;
+                    border-radius: 50%;
+                }
+            }
+
+            /* Mobile Drop Overlay */
+            .sidebar-backdrop {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(15, 23, 42, 0.4);
+                backdrop-filter: blur(2px);
+                z-index: 1035;
+            }
+
+            .sidebar-open .sidebar-backdrop {
+                display: block;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="wrapper" id="app-wrapper">
+    <!-- Click-away overlay handler for mobile screens -->
+    <div class="sidebar-backdrop" onclick="toggleSidebar()"></div>
 
-<!-- ================= SIDEBAR ================= -->
-<aside class="main-sidebar" id="sidebar">
-
-    <a href="#" class="brand-link">
-        School ERP
-    </a>
-
-    <div class="sidebar-menu">
-
-        <a href="<?php echo site_url('welcome/dashboard');?>" class="active">
-            <i class="bi bi-speedometer2"></i> Dashboard
+    <!-- ================= SIDEBAR NAVIGATION ================= -->
+    <aside class="main-sidebar" id="sidebar">
+        <a href="#" class="brand-link">
+            School ERP
         </a>
 
-        <?php if ($role == 'admin' || $role == 'super_admin') { ?>
-
-   
-
-        <a href="<?php echo site_url('student');?>" > <i class="bi bi-people-fill"></i>
-            Students
-        </a>
-
-   
-    
-        <a href="<?php echo site_url('teachers');?>"><i class="bi bi-person-badge"></i> Teachers</a>
-        <a href="<?php echo site_url('classes');?>"><i class="bi bi-building"></i> Classes</a>
-        <a href="<?php echo site_url('subject');?>"><i class="bi bi-journal"></i> Subjects</a>
-        <a href="<?php echo site_url('payment/payment_search');?>"><i class="bi bi-cash"></i> Fees Collect</a>
-        <a href="<?php echo site_url('/result/create');?>"><i class="bi bi-cash"></i> Result</a>
-        <a href="<?php echo site_url('/result/testimonial/3');?>" target="_blank"><i class="bi bi-cash"></i> Testimonial</a>
-
-        <?php } ?>
-
-        <?php if ($role == 'super_admin') { ?>
-
-        <a href="<?php echo site_url('settings'); ?>">
-            <i class="bi bi-gear"></i> Settings
-        </a>
-
-        <?php } ?>
-
-    </div>
-
-</aside>
-
-<!-- ================= CONTENT ================= -->
-<div class="content-wrapper">
-
-<!-- TOP NAV -->
-<nav class="main-header">
-
-    <div class="left-nav">
-        <button class="sidebar-toggle" onclick="toggleSidebar()">
-            <i class="bi bi-list"></i>
-        </button>
-
-        <strong>Dashboard</strong>
-    </div>
-
-    <div class="right-nav">
-
-        <!-- USER -->
-        <div class="user-box">
-            <img src="https://i.pravatar.cc/100">
-            <div>
-                <div style="font-size:14px;font-weight:600;">
-                    <?php echo $username; ?>
-                </div>
-                <small class="text-muted">
-                    <?php echo $role; ?>
-                </small>
-            </div>
-        </div>
-
-        <!-- LOGOUT -->
-       <a class="logout-btn" href="<?php echo site_url('Welcome/logout'); ?>">
-                <i class="bi bi-box-arrow-right"></i> Logout
+        <div class="sidebar-menu">
+            <a href="<?php echo site_url('welcome/dashboard');?>" class="active">
+                <i class="bi bi-speedometer2"></i> Dashboard
             </a>
 
-    </div>
+            <?php if ($role == 'admin' || $role == 'super_admin') { ?>
+                <a href="<?php echo site_url('student');?>">
+                    <i class="bi bi-people-fill"></i> Students
+                </a>
+                <a href="<?php echo site_url('teachers');?>">
+                    <i class="bi bi-person-badge"></i> Teachers
+                </a>
+                <a href="<?php echo site_url('classes');?>">
+                    <i class="bi bi-building"></i> Classes
+                </a>
+                <a href="<?php echo site_url('subject');?>">
+                    <i class="bi bi-journal"></i> Subjects
+                </a>
+                <a href="<?php echo site_url('payment/payment_search');?>">
+                    <i class="bi bi-cash"></i> Fees Collect
+                </a>
+                <a href="<?php echo site_url('/result/create');?>">
+                    <i class="bi bi-file-earmark-spreadsheet"></i> Result
+                </a>
+                <a href="<?php echo site_url('/result/testimonial/3');?>" target="_blank">
+                    <i class="bi bi-award"></i> Testimonial
+                </a>
+            <?php } ?>
 
-</nav>
+            <?php if ($role == 'super_admin') { ?>
+                <a href="<?php echo site_url('settings'); ?>">
+                    <i class="bi bi-gear"></i> Settings
+                </a>
+            <?php } ?>
+        </div>
+    </aside>
 
+    <!-- ================= MAIN PLATFORM WRAPPER ================= -->
+    <div class="content-wrapper">
+        
+        <!-- TOP NAVBAR UTILITY -->
+        <nav class="main-header">
+            <div class="left-nav">
+                <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+                <strong class="d-none d-sm-inline-block text-dark">Dashboard</strong>
+            </div>
+
+            <div class="right-nav">
+                <!-- User Meta Profile Block -->
+                <div class="user-box">
+                    <img src="https://i.pravatar.cc/100" alt="Avatar">
+                    <div class="user-info">
+                        <div style="font-size:14px; font-weight:600; color: #1e293b;">
+                            <?php echo htmlspecialchars($username ?? 'User'); ?>
+                        </div>
+                        <small class="text-muted text-capitalize">
+                            <?php echo htmlspecialchars(str_replace('_', ' ', $role ?? '')); ?>
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Session Termination -->
+                <a class="logout-btn" href="<?php echo site_url('Welcome/logout'); ?>">
+                    <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+
+        <script>
+    function toggleSidebar() {
+        const wrapper = document.getElementById('app-wrapper');
+        if (window.innerWidth <= 992) {
+            wrapper.classList.toggle('sidebar-open');
+            wrapper.classList.remove('sidebar-collapsed');
+        } else {
+            wrapper.classList.toggle('sidebar-collapsed');
+            wrapper.classList.remove('sidebar-open');
+        }
+    }
+
+    window.addEventListener('resize', function() {
+        const wrapper = document.getElementById('app-wrapper');
+        if (window.innerWidth > 992) {
+            wrapper.classList.remove('sidebar-open');
+        }
+    });
+</script>

@@ -100,6 +100,38 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php endif; ?>
+
+</div> <!-- Close .content-wrapper (Opened in header) -->
+</div> <!-- Close #app-wrapper / .wrapper (Opened in header) -->
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core Responsive Layout Engine Handles Sidebar States -->
+<script>
+    function toggleSidebar() {
+        const wrapper = document.getElementById('app-wrapper');
+        
+        // Breakpoint matching CSS media query max-width: 992px
+        if (window.innerWidth <= 992) {
+            wrapper.classList.toggle('sidebar-open');
+            wrapper.classList.remove('sidebar-collapsed');
+        } else {
+            // Desktop behavior
+            wrapper.classList.toggle('sidebar-collapsed');
+            wrapper.classList.remove('sidebar-open');
+        }
+    }
+
+    // Safeguard: Clear out mobile active layouts if user scales viewport up to desktop
+    window.addEventListener('resize', function() {
+        const wrapper = document.getElementById('app-wrapper');
+        if (window.innerWidth > 992) {
+            wrapper.classList.remove('sidebar-open');
+        }
+    });
+</script>
+
 </body>
 </html>
 

@@ -57,7 +57,7 @@
                                     <th>Roll No</th>
                                     <th>Reg. Number</th>
                                     <th>Class</th>
-                                    <th>Session</th>
+                                    <th>Year</th>
                                     <th class="text-end pe-4">Actions</th>
                                 </tr>
                             </thead>
@@ -76,7 +76,7 @@
                                             <td><span class="badge bg-light text-dark border"><?php echo $student->roll_no; ?></span></td>
                                             <td><code><?php echo $student->registration_no; ?></code></td>
                                             <td>Class <?php echo $student->class_id; ?></td>
-                                            <td><span class="badge badge-soft-success"><?php echo $student->session_year; ?></span></td>
+                                            <td><span class="badge badge-soft-success"><?php echo $student->year; ?></span></td>
                                             <td class="text-end pe-4">
                                                 <button type="button" class="btn btn-primary btn-sm viewStudentBtn" data-id="<?php echo $student->id; ?>"> 
                                                     <i class="bi bi-eye"></i> View
