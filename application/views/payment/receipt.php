@@ -1,5 +1,3 @@
-
-
 <style>
     body {
         font-family: DejaVu Sans, Arial, sans-serif;
@@ -91,7 +89,7 @@
                     9=>'September',10=>'October',11=>'November',12=>'December'
                  ];
 
-        $type = [1=>'Tuition Fee',2=>'Admission Fee',3=>'Exam',4=>'Other'];
+        $type = [1=>'Tuition Fee',2=>'Exam Fee',3=>'Admission Fee',4=>'Other'];
      ?>
     <table>
         <thead>

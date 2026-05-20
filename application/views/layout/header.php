@@ -273,8 +273,16 @@ $username = $this->session->userdata('username');
                     <i class="bi bi-cash"></i> Fees Collect
                 </a>
                 <a href="<?php echo site_url('/result/create');?>">
-                    <i class="bi bi-file-earmark-spreadsheet"></i> Result
+                    <i class="bi bi-file-earmark-spreadsheet"></i> Result Entry
                 </a>
+                <a href="<?php echo site_url('/result/report');?>">
+                    <i class="bi bi-file-earmark-spreadsheet"></i> Result Sheet
+                </a>
+
+                <a href="<?php echo site_url('/report');?>">
+                    <i class="bi bi-file-earmark-spreadsheet"></i> Reports
+                </a>
+
                 <a href="<?php echo site_url('/result/testimonial/3');?>" target="_blank">
                     <i class="bi bi-award"></i> Testimonial
                 </a>

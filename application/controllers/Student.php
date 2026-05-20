@@ -47,54 +47,88 @@ class Student extends CI_Controller {
     | Save Student
     |--------------------------------------------------------------------------
     */
-    public function store()
-    {
+public function store()
+{
+    // =========================
+    // Upload Configuration
+    // =========================
+    $config['upload_path']   = FCPATH . 'images/teachers/';
+    $config['allowed_types'] = 'jpg|jpeg|png|webp';
+    $config['max_size']      = 2048;
+    $config['encrypt_name']  = TRUE;
 
-        $insert_data = [
+    // Load Upload Library
+    $this->load->library('upload');
+    $this->upload->initialize($config);
 
-            'full_name'     => $this->input->post('full_name'),
-            'roll_no'          => $this->input->post('roll_no'),
-            'registration_no'  => $this->input->post('registration_no'),
-            'gender'           => $this->input->post('gender'),
-            'date_of_birth'    => $this->input->post('date_of_birth'),
-            // 'blood_group'      => $this->input->post('blood_group'),
-            // 'religion'         => $this->input->post('religion'),
+    $image_path = '';
 
-            'class_id'         => $this->input->post('class_id'),
-            // 'section'          => $this->input->post('section'),
-            'session_year'     => $this->input->post('session_year'),
+    // =========================
+    // Check Image Upload
+    // =========================
+    if (!empty($_FILES['photo']['name'])) {
 
-            // 'mobile'           => $this->input->post('mobile'),
-            // 'guardian_name'    => $this->input->post('guardian_name'),
-            // 'guardian_mobile'  => $this->input->post('guardian_mobile'),
-            'present_address'  => $this->input->post('present_address'),
+        if ($this->upload->do_upload('photo')) {
 
-            // 'created_at'       => date('Y-m-d H:i:s')
+            $upload_data = $this->upload->data();
 
-        ];
-
-
-        $this->db->insert('students', $insert_data);
-
-        if ($this->db->affected_rows() > 0) {
-
-            $this->session->set_flashdata('msg_type', 'success');
-            $this->session->set_flashdata('msg_title', 'Success!');
-            $this->session->set_flashdata('msg_text', 'Student Added Successfully');
+            // Save relative path in DB
+            $image_path = 'images/teachers/' . $upload_data['file_name'];
 
         } else {
 
+            // Upload Error
             $this->session->set_flashdata('msg_type', 'error');
-            $this->session->set_flashdata('msg_title', 'Failed!');
-            $this->session->set_flashdata('msg_text', 'Failed to Add Student');
+            $this->session->set_flashdata('msg_title', 'Upload Failed!');
+            $this->session->set_flashdata('msg_text', strip_tags($this->upload->display_errors()));
 
+            redirect('student/create');
+            return;
         }
+    }
+
+    // =========================
+    // Insert Data
+    // =========================
+    $insert_data = [
+
+        'full_name'        => $this->input->post('full_name'),
+        'roll_no'          => $this->input->post('roll_no'),
+        'registration_no'  => $this->input->post('registration_no'),
+        'gender'           => $this->input->post('gender'),
+        'date_of_birth'    => $this->input->post('date_of_birth'),
+        // 'blood_group'      => $this->input->post('blood_group'),
+        // 'religion'         => $this->input->post('religion'),
+
+        'class_id'         => $this->input->post('class_id'),
+        // 'section'          => $this->input->post('section'),
+        'year'             => $this->input->post('year'),
+
+        'present_address'  => $this->input->post('present_address'),
+
+        'photo'            => $image_path,
+    ];
+
+    $this->db->insert('students', $insert_data);
+
+    // =========================
+    // Success / Failed Message
+    // =========================
+    if ($this->db->affected_rows() > 0) {
+
+        $this->session->set_flashdata('msg_type', 'success');
+        $this->session->set_flashdata('msg_title', 'Success!');
+        $this->session->set_flashdata('msg_text', 'Student Added Successfully');
+
+    } else {
+
+        $this->session->set_flashdata('msg_type', 'error');
+        $this->session->set_flashdata('msg_title', 'Failed!');
+        $this->session->set_flashdata('msg_text', 'Failed to Add Student');
+    }
 
     redirect('student/create');
-
-            
-
-    }
+}
 
 
     /*
@@ -179,7 +213,7 @@ public function id_cards($class_id, $session_year)
     // Fetch Students
     $students = $this->db
         ->where('class_id', $class_id)
-        ->where('session_year', $session_year)
+        ->where('year', $session_year)
         ->get('students')
         ->result();
 
@@ -194,11 +228,14 @@ public function id_cards($class_id, $session_year)
     ];
 
    
-    // 1. Load the library
-    $this->load->library('mpdf');
+    // 2. PDF GENERATION ENGINE (mPDF)
+    $this->load->library('pdf');
 
-    // 2. Initialize mPDF via our library
-    $mpdf = $this->mpdf->mpdf('A4', 'P');
+    // Initialize mPDF in Landscape orientation ('L') for wide tabulation sheets
+    $mpdf = $this->pdf->load('A4', 'P');
+
+    // Set Header
+    // $mpdf->SetHTMLHeader($this->pdf->header());
 
     // 3. Generate HTML and Output
     $html = $this->load->view('students/id_cards', $data, true);

@@ -19,107 +19,110 @@ class Payment extends CI_Controller {
         $this->load->view('payment/create', $data);
     }
 
-   public function store()
+public function store()
 {
-    $class_id      = $this->input->post('class_id');
-    $amount        = $this->input->post('amount');
-    $month         = $this->input->post('month');
-    $year          = $this->input->post('year');
-    $payment_type  = $this->input->post('payment_type');
+    $class_id     = $this->input->post('class_id', true);
+    $amount       = $this->input->post('amount', true);
+    $month        = $this->input->post('month', true);
+    $year         = $this->input->post('year', true);
+    $payment_type = $this->input->post('payment_type', true);
 
     // Validation
-    if (
-        empty($class_id) ||
-        empty($amount) ||
-        empty($month) ||
-        empty($year) ||
-        empty($payment_type)
-    ) {
-
-        $this->session->set_flashdata(
-            'error',
-            'All fields are required.'
-        );
-
-        redirect('payment/create');
+    if (!$class_id || !$amount || !$month || !$year || !$payment_type) {
+        return $this->_flash('error', 'Validation Error', 'All fields are required.', 'payment/create');
     }
 
-    // Get all students from selected class
-    $students = $this->db
-        ->where('class_id', $class_id)
-        ->where('status', 1)
-        ->get('students')
-        ->result();
+    // Get active students
+    $students = $this->db->where(['class_id' => $class_id,'status'   => 1])->get('students')->result();
 
-    // No students found
-    if (empty($students)) {
-
-        $this->session->set_flashdata(
-            'error',
-            'No students found in selected class.'
-        );
-
-        redirect('payment/create');
+    if (!$students) {
+        return $this->_flash('error', 'No Students', 'No students found in selected class.', 'payment/create');
     }
 
-    $inserted = 0;
-    $skipped  = 0;
-
-    foreach ($students as $student) {
-
-        // Check duplicate fee generation
-        $exists = $this->db
-            ->where([
-                'student_id'   => $student->id,
-                'class_id'     => $class_id,
+    // Existing payments (single query)
+    $existingIds = array_column(
+    $this->db->select('student_id')->where([
+        'class_id'     => $class_id,
                 'month'        => $month,
                 'year'         => $year,
                 'payment_type' => $payment_type
             ])
             ->get('payment')
-            ->row();
+            ->result_array(),
+        'student_id'
+    );
 
-        // Skip duplicate
-        if ($exists) {
+    $insertData = [];
+    $inserted = 0;
+    $skipped  = 0;
+
+    foreach ($students as $student) {
+
+        if (in_array($student->id, $existingIds)) {
             $skipped++;
             continue;
         }
 
-        // Insert fee record
-        $this->db->insert('payment', [
-
-            'class_id'      => $class_id,
-
-            'student_id'    => $student->id,
-
-            'payment_type'  => $payment_type,
-
-            'amount'        => $amount,
-
-            'paid_amount'   => 0,
-
-            'due_amount'    => $amount,
-
-            'status'        => 'unpaid',
-
-            'month'         => $month,
-
-            'year'          => $year,
-
-            // 'created_at'    => date('Y-m-d H:i:s')
-        ]);
+        $insertData[] = [
+            'class_id'     => $class_id,
+            'student_id'   => $student->id,
+            'payment_type' => $payment_type,
+            'amount'       => $amount,
+            'paid_amount'  => 0,
+            'due_amount'   => $amount,
+            'status'       => 'unpaid',
+            'month'        => $month,
+            'year'         => $year
+        ];
 
         $inserted++;
     }
 
-    // Success message
-    $this->session->set_flashdata(
-        'success',
-        $inserted . ' fee records generated successfully. '
-        . $skipped . ' skipped (already exists).'
-    );
+    if ($insertData) {
+        $this->db->insert_batch('payment', $insertData);
+    }
 
-    redirect('payment/create');
+    $paymentLabel = ($payment_type == 1) ? 'Tuition Fee' : 'Exam Fee';
+
+    // Message builder
+    if ($inserted > 0 && $skipped == 0) {
+
+        return $this->_flash(
+            'success',
+            'Success!',
+            "{$paymentLabel} Generated Successfully For {$inserted} students of the Class:{$class_id }, Month:{$month}",
+            'payment/create'
+        );
+
+    } elseif ($inserted > 0 && $skipped > 0) {
+
+        return $this->_flash(
+            'error',
+            'Partially Processed!',
+            "Already Set payment of {$class_id }, Month:{$month}. {$inserted} created, {$skipped} skipped.",
+            'payment/create'
+        );
+
+    }
+
+    return $this->_flash(
+        'error',
+        'Duplicate Entry!',
+         "{$paymentLabel} Not Generated For  The Class:{$class_id }, Month:{$month}",
+        'payment/create'
+    );
+}
+
+/**
+ * Helper function (recommended)
+ */
+private function _flash($type, $title, $text, $redirect)
+{
+    $this->session->set_flashdata('msg_type', $type);
+    $this->session->set_flashdata('msg_title', $title);
+    $this->session->set_flashdata('msg_text', $text);
+
+    return redirect($redirect);
 }
 
 public function payment_search()
@@ -143,7 +146,7 @@ public function payment_collection($student_id=null)
     // Payment history
     $data['payment'] = $this->db
         ->where('student_id', $student_id)
-        ->order_by('id', 'DESC')
+        ->order_by('month', 'ASC')
         ->get('payment')
         ->result();
 
@@ -190,7 +193,10 @@ public function payment_update()
             'pay_date'    => date('Y-m-d H:i:s')
         ]);
 
-    //echo json_encode(['status' => 'success', 'message' => 'Payment updated successfully!']);
+    $this->session->set_flashdata('msg_type', 'success');
+    $this->session->set_flashdata('msg_title', 'Success');
+    $this->session->set_flashdata('msg_text', 'Paid');
+
 
     redirect('payment/payment_collection?student_id=' . $payment->student_id);
 }
@@ -211,7 +217,8 @@ public function receipt($student_id)
     // All payments of student
     $payments = $this->db
         ->where('student_id', $student_id)
-        ->order_by('id', 'DESC')
+        ->where_in('status',['paid','partial'])
+        ->order_by('month', 'ASC')
         ->get('payment')
         ->result();
 
@@ -249,5 +256,9 @@ public function receipt($student_id)
     $mpdf->Output('Payment_Statement_' . $student->full_name . '.pdf', 'I');
 }
 
-
+public function test()
+{
+    $pass = "admin@2026#";
+    echo password_hash($pass,true);
+}
 }

@@ -1,110 +1,58 @@
 <?php $this->load->view('layout/header'); ?>
 
-<section class="content py-4">
+<section class="payment-search-container">
 
-    <div class="container-fluid">
+    <div class="container">
 
-        <!-- PAGE HEADER -->
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <!-- HEADER -->
+        <header class="top-bar">
 
-            <div>
-
-                <h3 class="fw-bold mb-1 text-dark">
-                    Payment History
-                </h3>
-
-                <p class="text-muted mb-0 small">
-                    Search and view student wise payment collection history
-                </p>
-
+            <div class="brand-meta">
+                <h2>Payment History</h2>
+                <p>Search student payment records quickly</p>
             </div>
 
-            <div>
+            <a href="<?= site_url('welcome/dashboard'); ?>" class="btn-back">
+                <i class="bi bi-arrow-left"></i>
+                <span>Dashboard</span>
+            </a>
 
-                <a href="<?= site_url('dashboard'); ?>" 
-                   class="btn btn-light border rounded-3 px-3">
+        </header>
 
-                    <i class="bi bi-arrow-left me-1"></i>
-                    Back Dashboard
+        <!-- SEARCH -->
+        <div class="search-wrapper">
 
-                </a>
+            <div class="search-card">
 
-            </div>
+                <form method="GET"
+                      action="<?= site_url('payment/payment_collection'); ?>"
+                      class="search-inline-form">
 
-        </div>
+                    <!-- INPUT -->
+                    <div class="input-wrapper">
 
-        <!-- CONTENT -->
-        <div class="row justify-content-center">
+                        <i class="bi bi-search input-icon"></i>
 
-            <div class="col-xl-12 col-lg-12 col-md-12">
-
-                <div class="card payment-card border-0">
-
-                    <!-- CARD TOP -->
-                    <div class="card-top text-center">
-
-                        <div class="icon-box mx-auto mb-3">
-                            <i class="bi bi-credit-card-2-front"></i>
-                        </div>
-
-                        <h4 class="fw-bold mb-1">
-                            Payment Search
-                        </h4>
-
-                        <p class="small opacity-75 mb-0">
-                            Enter student ID to check payment records
-                        </p>
+                        <input
+                            type="text"
+                            id="student_id"
+                            name="student_id"
+                            placeholder="Search by Student ID..."
+                            autocomplete="off"
+                            required>
 
                     </div>
 
-                    <!-- CARD BODY -->
-                    <div class="card-body p-4 p-lg-5">
+                    <!-- BUTTON -->
+                    <button type="submit" class="btn-submit">
 
-                        <form method="GET"
-                              action="<?= site_url('payment/payment_collection'); ?>">
+                        <i class="bi bi-search"></i>
 
-                            <!-- LABEL -->
-                            <label class="form-label">
-                                Student ID
-                            </label>
+                        <span>Payment Search</span>
 
-                            <!-- SEARCH ROW -->
-                            <div class="search-wrapper">
+                    </button>
 
-                                <!-- INPUT -->
-                                <div class="input-group custom-input-group">
-
-                                    <span class="input-group-text">
-                                        <i class="bi bi-person-badge"></i>
-                                    </span>
-
-                                    <input type="text"
-                                           name="student_id"
-                                           class="form-control"
-                                           placeholder="Enter Student ID"
-                                           required>
-
-                                </div>
-
-                                <!-- BUTTON -->
-                                <button type="submit"
-                                        class="btn btn-primary btn-search">
-
-                                    <i class="bi bi-search"></i>
-
-                                    <span>
-                                        Search
-                                    </span>
-
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-                </div>
+                </form>
 
             </div>
 
@@ -116,158 +64,235 @@
 
 <style>
 
+:root{
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --primary:#2563eb;
+    --primary-hover:#1d4ed8;
+    --border:#e2e8f0;
+}
+
 body{
-    background:#f4f6f9;
+    background:var(--bg);
     font-family:'Inter',sans-serif;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
 }
 
-/* ================= CARD ================= */
+/* PAGE */
 
-.payment-card{
-    border-radius:22px;
-    overflow:hidden;
-    background:#fff;
-    box-shadow:0 10px 35px rgba(0,0,0,.06);
+.payment-search-container{
+    padding:24px 12px;
 }
 
-/* ================= TOP ================= */
-
-.card-top{
-    padding:42px 30px 34px;
-    background:linear-gradient(135deg,#0d6efd,#2563eb);
-    color:#fff;
+.container{
+    max-width:1000px;
+    margin:auto;
 }
 
-/* ================= ICON ================= */
+/* HEADER */
 
-.icon-box{
-    width:75px;
-    height:75px;
-    border-radius:50%;
-    background:rgba(255,255,255,.15);
+.top-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    margin-bottom:24px;
+    flex-wrap:wrap;
+}
+
+.brand-meta h2{
+    margin:0;
+    font-size:26px;
+    font-weight:700;
+}
+
+.brand-meta p{
+    margin:4px 0 0;
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* BUTTON */
+
+.btn-back{
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:32px;
-    backdrop-filter:blur(10px);
-}
-
-/* ================= LABEL ================= */
-
-.form-label{
+    gap:8px;
+    padding:10px 16px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+    text-decoration:none;
     font-size:14px;
     font-weight:600;
-    color:#374151;
-    margin-bottom:10px;
+    color:#334155;
+    transition:.2s ease;
 }
 
-/* ================= SEARCH ROW ================= */
+.btn-back:hover{
+    background:#f1f5f9;
+    color:#0f172a;
+}
 
-.search-wrapper{
+/* CARD */
+
+.search-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:16px;
+    box-shadow:0 10px 25px rgba(0,0,0,.04);
+}
+
+/* FORM */
+
+.search-inline-form{
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:12px;
 }
 
-/* ================= INPUT GROUP ================= */
+/* INPUT */
 
-.custom-input-group{
+.input-wrapper{
+    position:relative;
     flex:1;
-    height:56px;
+}
+
+.input-icon{
+    position:absolute;
+    top:50%;
+    left:14px;
+    transform:translateY(-50%);
+    color:#94a3b8;
+    font-size:15px;
+}
+
+.input-wrapper input{
+    width:100%;
+    height:52px;
     border-radius:14px;
-    overflow:hidden;
-    border:1px solid #dbe1e8;
-    transition:all .2s ease;
-    background:#fff;
+    border:1px solid #000;
+    background:#f8fafc;
+    padding:0 16px 0 42px;
+    font-size:15px;
+    transition:.2s ease;
 }
 
-.custom-input-group:focus-within{
-    border-color:#0d6efd;
-    box-shadow:0 0 0 4px rgba(13,110,253,.10);
+.input-wrapper input:focus{
+    outline:none;
+    border-color:var(--primary);
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.10);
 }
 
-.custom-input-group .input-group-text{
-    background:#fff;
-    border:none;
+.input-wrapper input::placeholder{
+    color:#94a3b8;
+}
+
+/* SUBMIT */
+
+.btn-submit{
+    height:52px;
+    min-width:180px;
     padding:0 18px;
-    color:#6b7280;
-    font-size:18px;
-}
-
-.custom-input-group .form-control{
     border:none;
-    box-shadow:none;
-    font-size:15px;
-    padding-left:0;
-}
-
-.custom-input-group .form-control::placeholder{
-    color:#9ca3af;
-}
-
-/* ================= BUTTON ================= */
-
-.btn-search{
-    height:56px;
-    padding:0 26px;
     border-radius:14px;
-    font-size:15px;
+    background:var(--primary);
+    color:#fff;
+    font-size:14px;
     font-weight:600;
     display:flex;
     align-items:center;
     justify-content:center;
     gap:8px;
-    white-space:nowrap;
     transition:.2s ease;
+    white-space:nowrap;
 }
 
-.btn-search:hover{
-    transform:translateY(-1px);
+.btn-submit:hover{
+    background:var(--primary-hover);
 }
 
-/* ================= RESPONSIVE ================= */
+/* =========================
+   MOBILE OPTIMIZATION
+========================= */
 
 @media(max-width:768px){
 
-    .card-top{
-        padding:32px 20px 28px;
+    .payment-search-container{
+        padding:18px 10px;
     }
 
-    .card-body{
-        padding:24px !important;
-    }
-
-    .search-wrapper{
+    .top-bar{
         flex-direction:column;
         align-items:stretch;
+        margin-bottom:18px;
     }
 
-    .btn-search{
-        width:100%;
-    }
-
-}
-
-@media(max-width:576px){
-
-    .icon-box{
-        width:65px;
-        height:65px;
-        font-size:28px;
-    }
-
-    .card-top h4{
+    .brand-meta h2{
         font-size:22px;
     }
 
-    .custom-input-group{
-        height:52px;
+    .brand-meta p{
+        font-size:13px;
     }
 
-    .btn-search{
-        height:52px;
+    .btn-back{
+        width:100%;
     }
 
+    .search-card{
+        padding:14px;
+        border-radius:16px;
+    }
+
+    .search-inline-form{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+    }
+
+    .input-wrapper{
+        width:100%;
+    }
+
+    .input-wrapper input{
+        height:50px;
+        font-size:16px; /* Prevent iOS zoom */
+    }
+
+    .btn-submit{
+        width:100%;
+        height:50px;
+        min-width:100%;
+    }
+}
+
+/* EXTRA SMALL */
+
+@media(max-width:480px){
+
+    .brand-meta h2{
+        font-size:20px;
+    }
+
+    .search-card{
+        padding:12px;
+    }
+
+    .input-wrapper input{
+        border-radius:12px;
+    }
+
+    .btn-submit{
+        border-radius:12px;
+        font-size:13px;
+    }
 }
 
 </style>

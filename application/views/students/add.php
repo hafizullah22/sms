@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <form method="post" action="<?php echo site_url('student/store'); ?>" enctype="multipart/form-data">
+        <form action="<?= site_url('student/store'); ?>" method="post" enctype="multipart/form-data">
 
             <div class="row g-4">
 
@@ -164,8 +164,8 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Year / Session</label>
-                                <select name="session_year" class="form-select">
-                                    <option>2026-27</option>
+                                <select name="year" class="form-select">
+                                    <option value="2026">2026</option>
                                 </select>
                             </div>
 

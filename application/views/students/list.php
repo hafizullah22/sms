@@ -68,7 +68,7 @@
                                             <td class="ps-4">
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar-sm me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                                                        <img src="<?php echo base_url('assets/images/avatars/default.jpg'); ?>" style="width:100%; border-radius:50%">
+                                                        <img src="<?php echo base_url($student->photo); ?>" style="width:100%; border-radius:50%">
                                                     </div>
                                                     <span class="fw-semibold text-dark"><?php echo $student->full_name; ?></span>
                                                 </div>

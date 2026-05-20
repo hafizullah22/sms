@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         customClass: {
             popup: 'shadow-lg rounded-4 border-0',
             title: 'fw-bold',
-            htmlContainer: 'text-muted'
+            htmlContainer: 'text-black'
         },
 
         didOpen: (toast) => {
